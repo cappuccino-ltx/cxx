@@ -12,6 +12,7 @@ int main(int argc, char** argv) {
     uint16_t port = std::stoi(argv[1]);
 
     ns_tcp::TcpServer ser(port);
+    ser.Start([](const std::string& mass){return mass;});
 
     return 0;
 }

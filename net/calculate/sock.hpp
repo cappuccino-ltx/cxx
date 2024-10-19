@@ -52,8 +52,9 @@ namespace ns_sock{
             }
         }
         virtual void ReUse(){
-            if(setsockopt() < 0) {
-                std::cerr << "feiled to connect !!!"
+            int opt = 1;
+            if(setsockopt(sock_,SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt,sizeof(opt)) < 0) {
+                std::cerr << "feiled to reuse !!!" << std::endl;
             }
         }
         virtual void Bind(uint16_t port) override{
