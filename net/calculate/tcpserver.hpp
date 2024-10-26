@@ -15,9 +15,9 @@ namespace ns_tcp{
 
     using namespace ns_sock;
 
-    using psock =  std::shared_ptr<vir_sock>;                   //sock 智能指针类型
+    
     using tpool = ns_thread::ThreadPool<psock>;           //线程池类型
-    using fun_back = std::function<std::string(const std::string&)>;   //上层的回调函数
+    using fun_back = std::function<void (const std::string&,std::string*)>;   //上层的回调函数
 
 
     class TcpServer{
@@ -37,10 +37,13 @@ namespace ns_tcp{
             std::unique_ptr<tpool> pool(tpool::GetInstance([collback,this](psock conn){
                 //基于短链接的服务处理
                 std::string buff;
+                std::string send;
                 conn->Read(&buff);
                 //可以在这里插入协议解析，然后返回上层的就是request了，但是这里暂时不做处理
                 //?
-                conn->Write(collback(buff));
+
+                collback(buff,&send);
+                conn->Write(send);
             }));
             for ( ;; ) {
                 psock client = listensock_->Accept();

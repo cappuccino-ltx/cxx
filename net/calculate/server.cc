@@ -1,5 +1,5 @@
 
-#include "tcpserver.hpp"
+#include "calculate.hpp"
 
 #include <iostream>
 
@@ -11,8 +11,8 @@ int main(int argc, char** argv) {
 
     uint16_t port = std::stoi(argv[1]);
 
-    ns_tcp::TcpServer ser(port);
-    ser.Start([](const std::string& mass){return mass;});
+    ns_calculate::Calculation ser(port);
+    ser.listen();
 
     return 0;
 }

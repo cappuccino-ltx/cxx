@@ -34,6 +34,8 @@ namespace ns_sock{
         uint16_t        port_ = 0;
     };
 
+    
+
     class Sock : public vir_sock{
 
     public:
@@ -131,4 +133,9 @@ namespace ns_sock{
             }
         }
     };
+
+
+
+
+    using psock =  std::shared_ptr<vir_sock>;                   //sock 智能指针类型
 }

@@ -80,4 +80,7 @@ namespace ns_thread{
     template<class T>
     ThreadPool<T>*           ThreadPool<T>::pool_ = nullptr;
 
+
+    
+
 }
