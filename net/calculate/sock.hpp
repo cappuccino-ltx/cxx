@@ -49,7 +49,7 @@ namespace ns_sock{
             //int BLOCK = block ? SOCK_NONBLOCK : 0;
             sock_ = socket(AF_INET, SOCK_STREAM , 0);
             if (sock_ < 0) {
-                std::cerr << "failed to conncet !!!" << std::endl;
+                std::cerr << "failed to socket !!!" << std::endl;
                 exit(-1);
             }
         }

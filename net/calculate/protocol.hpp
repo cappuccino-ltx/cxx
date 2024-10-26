@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 
+#include <json/json.h>
+
 using namespace std::literals;
 
 namespace ns_protocol{
@@ -22,7 +24,7 @@ namespace ns_protocol{
         ~Request() {}
         
         std::string Encode() {
-            
+#ifdef MYSELF
             std::string ret = segf;
             ret += std::to_string(x_);
             ret += segf;
@@ -33,11 +35,20 @@ namespace ns_protocol{
 
             int len = ret.size();
             ret = std::to_string(len) + ret;
-
             return ret;
+#else
+            Json::Value root;
+            root["x"] = Json::Value::Int64(x_);
+            root["y"] = Json::Value::Int64(y_);
+            root["opt"] = opt_;
+
+            Json::FastWriter writer;
+            return writer.write(root);
+#endif      
         }
 
         bool Decode(std::string mass) {
+#ifdef MYSELF
             size_t begin = 0;
             size_t end = mass.find(segf,begin);
             if(end == std::string::npos) return false;
@@ -54,6 +65,16 @@ namespace ns_protocol{
             begin = ++end; end = mass.find(endf,end);
             y_ = std::stoi(mass.substr(begin,end));
             return true;
+#else
+            Json::Value root;
+            Json::Reader reader;
+            reader.parse(mass,root);
+
+            x_ = root["x"].asInt64();
+            y_ = root["y"].asInt64();
+            opt_ = root["opt"].asInt();
+            return true;
+#endif
         }
 
     public:
@@ -75,7 +96,7 @@ namespace ns_protocol{
         ~Response() {}
 
         std::string Encode() {
-            
+#ifdef MYSELF
             std::string ret = segf;
             ret += std::to_string(result_);
             ret += segf;
@@ -85,9 +106,18 @@ namespace ns_protocol{
             int len = ret.size();
             ret = std::to_string(len) + ret;
             return ret;
+#else 
+            Json::Value root;
+            root["result"] = Json::Value::Int64(result_);
+            root["code"] = code_;
+
+            Json::FastWriter writer;
+            return writer.write(root);
+#endif
         }
 
         bool Decode(std::string mass) {
+#ifdef MYSELF
             size_t begin = 0;
             size_t end = mass.find(segf,begin);
             if(end == std::string::npos) return false;
@@ -100,6 +130,14 @@ namespace ns_protocol{
             begin = ++end; end = mass.find(endf,end);
             code_ = std::stoi(mass.substr(begin,end));
             return true;
+#else
+            Json::Value root;
+            Json::Reader reader;
+            reader.parse(mass,root);
+            result_ = root["result"].asInt64();
+            code_ = root["code"].asInt();
+            return true;
+#endif
         }
 
     public:

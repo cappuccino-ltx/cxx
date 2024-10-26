@@ -10,4 +10,6 @@ add_executable(server ${server_src})
 add_executable(client ${client_src})
 
 find_library(thread pthread)
-target_link_libraries(server ${thread})
+find_library(json jsoncpp)
+target_link_libraries(server ${thread} ${json}) 
+target_link_libraries(client ${json}) 

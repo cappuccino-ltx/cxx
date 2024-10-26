@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
     psock sock(new Sock());
     
     
-    int count = 100000;
+    int count = 10000;
     while (count--) {
         int x = rand() % 1000;
         int y = rand() % 1000;
